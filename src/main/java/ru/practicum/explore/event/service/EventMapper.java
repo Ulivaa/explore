@@ -12,10 +12,10 @@ public class EventMapper {
     public static Event toEvent(EventInDto eventInDto) {
         return Event.builder()
                 .annotation(eventInDto.getAnnotation())
+                .id(eventInDto.getId())
                 .category(Category.builder().id(eventInDto.getCategory()).build())
                 .eventDate(eventInDto.getEventDate())
                 .description(eventInDto.getDescription())
-//                .initiator(user)
                 .createdOn(LocalDateTime.now())
                 .lat(eventInDto.getLocation().getLat())
                 .lon(eventInDto.getLocation().getLon())

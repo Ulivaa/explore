@@ -53,7 +53,7 @@ public class EventPrivateController {
 
     @PatchMapping("/{eventId}")
     public EventFullDto cancelUserEvent(@PathVariable long userId, @PathVariable long eventId) {
-        return null;
+        return EventMapper.toEventFullDto(eventService.cancelEvent(userId, eventId));
     }
 
     /*-------------------------------------------- REQUESTS --------------------------------------------*/

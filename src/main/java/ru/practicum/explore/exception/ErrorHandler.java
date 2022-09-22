@@ -40,4 +40,10 @@ public class ErrorHandler {
     public ApiError handleUserDoesNotHaveAccessException(final UserDoesNotHaveAccessException e) {
         return new ApiError( new String[]{}, e.getMessage(), HttpStatus.FORBIDDEN.getReasonPhrase(), HttpStatus.FORBIDDEN.value());
     }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ApiError handleEventNotHaveStatePendingException(final EventNotHaveStatePendingException e) {
+        return new ApiError( new String[]{}, e.getMessage(), HttpStatus.FORBIDDEN.getReasonPhrase(), HttpStatus.FORBIDDEN.value());
+    }
 }

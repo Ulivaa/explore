@@ -3,8 +3,10 @@ package ru.practicum.explore.event.service;
 import org.springframework.stereotype.Service;
 import ru.practicum.explore.category.service.CategoryService;
 import ru.practicum.explore.event.model.Event;
+import ru.practicum.explore.event.model.State;
 import ru.practicum.explore.event.repository.EventRepository;
 import ru.practicum.explore.exception.EventNotFoundException;
+import ru.practicum.explore.exception.EventNotHaveStatePendingException;
 import ru.practicum.explore.exception.UserDoesNotHaveAccessException;
 import ru.practicum.explore.user.service.UserService;
 
@@ -35,6 +37,7 @@ public class EventServiceImpl implements EventService {
     @Override
     public Event updateEvent(Event eventUpdate, long userId) {
         Event event = getEventById(eventUpdate.getId());
+//        сдедать метод отдельный
         if (event.getInitiator().getId() != userId) {
             throw new UserDoesNotHaveAccessException("Пользователь не является владельцем события.");
         }
@@ -87,7 +90,16 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Event cancelEvent(long eventId) {
-        return null;
+    public Event cancelEvent(long userId, long eventId) {
+        Event event = getEventById(eventId);
+        if (event.getInitiator().getId() != userId) {
+            throw new UserDoesNotHaveAccessException("Пользователь не является владельцем события.");
+        }
+        if (event.getState() != State.PENDING) {
+            throw new EventNotHaveStatePendingException("Событие уже опубликовано или отменено.");
+
+        }
+        event.setState(State.CANCELED);
+        return eventRepository.save(event);
     }
 }

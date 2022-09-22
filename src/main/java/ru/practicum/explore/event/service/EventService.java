@@ -16,7 +16,7 @@ public interface EventService {
 
     Collection<Event> getUserEvents();
 
-    Event cancelEvent(long eventId);
+    Event cancelEvent(long userId, long eventId);
 
 
 }
