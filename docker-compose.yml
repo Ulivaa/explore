@@ -1,15 +1,51 @@
-version: '3.1'
+version: '3.8'
 services:
-  stats-server:
-    ports:
-      - "9090:9090"
-
-  stats-db:
-    image: postgres:14-alpine
-
-  ewm-service:
+  explore:
+    build: ./exploreApp
+    container_name: exploreApp
     ports:
       - "8080:8080"
+    depends_on:
+      - db-explore
+      - statistic
+    environment:
+#      - STATISTIC_URL=http://statisticApp:9090
+       #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/explore_with_me
+        DB_HOST: db-explore
+        DB_PORT: 5432
+        DB_NAME: explore_with_me
+        POSTGRES_USER: kitty
+        POSTGRES_PASSWORD: purrrrrr
+        TZ: "Europe/Moscow"
+        STATISTIC_URL: http://statistic:9090
 
-  ewm-db:
-    image: postgres:14-alpine
+
+  statistic:
+    build: ./statisticApp
+    #    image:
+    container_name: statisticApp
+    ports:
+      - "9090:9090"
+    depends_on:
+      - db-explore
+    environment:
+      #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/explore_with_me
+      DB_HOST: db-explore
+      DB_PORT: 5432
+      DB_NAME: explore_with_me
+      POSTGRES_USER: kitty
+      POSTGRES_PASSWORD: purrrrrr
+      TZ: "Europe/Moscow"
+
+  db-explore:
+    image: postgres:14.3-alpine
+    container_name: db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: explore_with_me
+      POSTGRES_USER: kitty
+      POSTGRES_PASSWORD: purrrrrr
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./postgres_db:/var/lib/postgresql/data
