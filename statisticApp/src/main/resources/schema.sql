@@ -1,4 +1,4 @@
--- DROP TABLE statistics CASCADE;
+DROP TABLE statistics CASCADE;
 
 CREATE TABLE IF NOT EXISTS statistics
 (

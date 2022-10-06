@@ -10,11 +10,13 @@ import ru.practicum.explore.event.repository.EventRepository;
 import ru.practicum.explore.exception.*;
 import ru.practicum.explore.user.service.UserService;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -36,7 +38,6 @@ public class EventServiceImpl implements EventService {
         event.setCategory(categoryService.getCategoryById(event.getCategory().getId()));
         return eventRepository.save(event);
     }
-
 
     @Override
     public Event updateEventByUser(Event newEvent, long userId) {
@@ -60,7 +61,6 @@ public class EventServiceImpl implements EventService {
         return eventRepository.save(updateEventFields(event, newEvent));
     }
 
-
     @Override
     public Event increaseEventConfirmedRequests(Event event) {
         event.setConfirmedRequests(event.getConfirmedRequests() + 1);
@@ -76,31 +76,31 @@ public class EventServiceImpl implements EventService {
     public Collection<Event> getFilteredEvents(String text,
                                                List<Long> categories,
                                                Boolean paid,
-                                               LocalDateTime rangeStart,
-                                               LocalDateTime rangeEnd,
+                                               String rangeStart,
+                                               String rangeEnd,
                                                Boolean onlyAvailable,
                                                Sort sort,
                                                int from,
                                                int size) {
+        LocalDateTime start;
+        LocalDateTime end;
+        Boolean isCategories = categories.isEmpty() ? false : true;
 
+        if (rangeStart.isEmpty()) {
+            start = LocalDateTime.now();
+        } else {
+            start = LocalDateTime.parse(URLDecoder.decode(rangeStart, StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+        if (rangeEnd.isEmpty()) {
+            end = LocalDateTime.now().minusYears(100);
+        } else {
+            end = LocalDateTime.parse(URLDecoder.decode(rangeEnd, StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
         if (text != null) {
             text.toLowerCase();
         }
-        Boolean isCategories=false;
-        if (categories != null){
-            isCategories = true;
-        }
-        var events = eventRepository.find(
-                text, isCategories,
-                categories, paid, onlyAvailable, PageRequest.of(from, size)
-        );
+        var events = eventRepository.find(text, isCategories, categories, paid, start, end, onlyAvailable, PageRequest.of(from, size));
 
-        if (rangeEnd == null) {
-            events.stream().filter(event -> event.getEventDate().isAfter(rangeStart == null ? LocalDateTime.now() : rangeStart)).collect(Collectors.toList());
-        } else {
-            events.stream().filter(event -> event.getEventDate().isAfter(rangeStart == null ? LocalDateTime.now() : rangeStart) && event.getEventDate().isBefore(rangeEnd)).collect(Collectors.toList());
-
-        }
         if (sort != null) {
             if (sort == Sort.EVENT_DATE) {
                 events.stream().sorted(Comparator.comparing(Event::getEventDate));
@@ -113,30 +113,45 @@ public class EventServiceImpl implements EventService {
     }
 
     @Override
-    public Collection<Event> getEventByAdmin(Integer[] users, String[] states, Integer[] categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
-        if (rangeStart == null) {
-            rangeStart = LocalDateTime.now();
+    public Collection<Event> getEventByAdmin(List<Long> users, List<String> statesStr, List<Long> categories, String rangeStart, String rangeEnd, int from, int size) {
+        LocalDateTime start;
+        LocalDateTime end;
+        boolean isUsers = users.isEmpty() ? false : true;
+        boolean isCat = categories.isEmpty() ? false : true;
+        boolean isState = statesStr.isEmpty() ? false : true;
+
+        if (rangeStart.isEmpty()) {
+            start = LocalDateTime.now();
+        } else {
+            start = LocalDateTime.parse(URLDecoder.decode(rangeStart, StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
-        return eventRepository.findByAdmin(users, states, categories, rangeStart, rangeEnd, PageRequest.of(from, size));
+        if (rangeEnd.isEmpty()) {
+            end = LocalDateTime.now().minusYears(100);
+        } else {
+            end = LocalDateTime.parse(URLDecoder.decode(rangeEnd, StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }
+
+        return eventRepository.findByAdmin(isUsers, users, isState, statesStr, isCat, categories, start, end, PageRequest.of(from, size));
     }
 
     @Override
     public Event getEventById(long eventId) {
-        return eventRepository.findById(eventId).orElseThrow(() -> new EventNotFoundException("Событие не найдено."));
+        return eventRepository.findById(eventId).orElseThrow(() -> new NotFoundException("Событие не найдено."));
     }
 
-
     public Event getPublishedEventById(long eventId) {
-        Event event= eventRepository.findByIdAndState(eventId, State.PUBLISHED);
-        if (event==null) {
-            throw new EventNotFoundException("Событие не найдено.");
+        Event event = eventRepository.findByIdAndState(eventId, State.PUBLISHED);
+        if (event == null) {
+            throw new NotFoundException("Событие не найдено.");
+        } else {
+            event.setViews(event.getViews() + 1);
         }
+        eventRepository.save(event);
         return event;
     }
 
     @Override
     public Event getUserEvent(long eventId, long userId) {
-//        TODO обработать исключение
         return eventRepository.findByIdAndInitiator_Id(eventId, userId);
     }
 
@@ -189,10 +204,6 @@ public class EventServiceImpl implements EventService {
             return false;
         }
         return true;
-    }
-
-    public Collection<Event> getEventsByCategory(long catId) {
-        return eventRepository.findByCategory_Id(catId);
     }
 
     private Event updateEventFields(Event event, Event newEvent) {

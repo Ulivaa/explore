@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import ru.practicum.explore.exception.IncorrectParameterException;
-import ru.practicum.explore.exception.UserNotFoundException;
+import ru.practicum.explore.exception.NotFoundException;
 import ru.practicum.explore.user.model.User;
 import ru.practicum.explore.user.repository.UserRepository;
 
@@ -26,25 +26,24 @@ public class UserServiceImpl implements UserService {
     public User addUser(User user) {
         hasParams(user);
         checkValidParams(user);
-       return userRepository.save(user);
-//        return user;
+        return userRepository.save(user);
     }
 
     @Override
     public void deleteUser(long userId) {
         if (getUserById(userId) != null) {
             userRepository.deleteById(userId);
-        } else throw new UserNotFoundException(String.format("Пользователь № %d не найден", userId));
+        } else throw new NotFoundException(String.format("Пользователь № %d не найден", userId));
     }
 
     @Override
     public Collection<User> getAllUsers(List<Long> ids, int from, int size) {
-        return userRepository.findAllById(ids, PageRequest.of(from,size)).stream().collect(Collectors.toList());
+        return userRepository.findAllById(ids, PageRequest.of(from, size)).stream().collect(Collectors.toList());
     }
 
     @Override
     public User getUserById(long userId) {
-        return userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(String.format("Пользователь № %d не найден", userId)));
+        return userRepository.findById(userId).orElseThrow(() -> new NotFoundException(String.format("Пользователь № %d не найден", userId)));
     }
 
     private boolean checkValidParams(User user) {
@@ -61,7 +60,7 @@ public class UserServiceImpl implements UserService {
             throw new IncorrectParameterException("Incorrect parameter \"email\"");
         }
         if (user.getName() == null) {
-            throw new IncorrectParameterException("Incorrect parameter \"email\"");
+            throw new IncorrectParameterException("Incorrect parameter \"name\"");
         }
         return true;
     }

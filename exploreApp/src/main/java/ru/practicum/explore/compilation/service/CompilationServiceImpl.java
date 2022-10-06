@@ -6,7 +6,7 @@ import ru.practicum.explore.compilation.model.Compilation;
 import ru.practicum.explore.compilation.repository.CompilationRepository;
 import ru.practicum.explore.event.model.Event;
 import ru.practicum.explore.event.service.EventService;
-import ru.practicum.explore.exception.CompilationNotFoundException;
+import ru.practicum.explore.exception.NotFoundException;
 
 import java.util.Collection;
 import java.util.Set;
@@ -33,12 +33,11 @@ public class CompilationServiceImpl implements CompilationService {
         compilationRepository.deleteById(compId);
     }
 
-//    TODO почему нельзя удалить
     @Override
     public void deleteEventFromCompilation(long eventId, long compId) {
         Compilation compilation = getCompilationById(compId);
         compilation.getEvents().removeIf(event -> event.getId().equals(eventId));
-        compilationRepository.saveAndFlush(compilation);
+        compilationRepository.save(compilation);
     }
 
     @Override
@@ -58,14 +57,13 @@ public class CompilationServiceImpl implements CompilationService {
         compilationRepository.save(compilation);
     }
 
-
     @Override
     public Collection<Compilation> getCompilations(boolean pinned, int from, int size) {
-        return compilationRepository.findAllByPinned(pinned, PageRequest.of(from,size));
+        return compilationRepository.findAllByPinned(pinned, PageRequest.of(from, size));
     }
 
     @Override
     public Compilation getCompilationById(long compId) {
-        return compilationRepository.findById(compId).orElseThrow(() -> new CompilationNotFoundException("Подборка не найдена"));
+        return compilationRepository.findById(compId).orElseThrow(() -> new NotFoundException("Подборка не найдена"));
     }
 }

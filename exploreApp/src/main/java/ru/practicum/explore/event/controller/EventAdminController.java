@@ -1,6 +1,5 @@
 package ru.practicum.explore.event.controller;
 
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.explore.event.model.EventFullDto;
@@ -8,8 +7,8 @@ import ru.practicum.explore.event.model.EventInDto;
 import ru.practicum.explore.event.service.EventMapper;
 import ru.practicum.explore.event.service.EventService;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Validated
@@ -25,11 +24,11 @@ public class EventAdminController {
 
     @GetMapping
     public Collection<EventFullDto> getEventByAdmin(
-            @RequestParam(required = false) Integer[] users,
-            @RequestParam(required = false) String[] states,
-            @RequestParam(required = false) Integer[] categories,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
-            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
+            @RequestParam(required = false) List<Long> users,
+            @RequestParam(required = false) List<String> states,
+            @RequestParam(required = false) List<Long> categories,
+            @RequestParam(required = false) String rangeStart,
+            @RequestParam(required = false) String rangeEnd,
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size) {
         return eventService.getEventByAdmin(users, states, categories, rangeStart, rangeEnd, from, size)

@@ -49,7 +49,5 @@ public class EventFullDto {
         private final double lat;
         private final double lon;
     }
-
-
 }
 

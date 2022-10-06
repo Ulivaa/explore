@@ -24,6 +24,7 @@ public class EventMapper {
                 .confirmedRequests(0L)
                 .state(State.PENDING)
                 .title(eventInDto.getTitle())
+                .views(0L)
                 .build();
     }
 

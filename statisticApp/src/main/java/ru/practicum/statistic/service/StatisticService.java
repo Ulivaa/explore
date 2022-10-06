@@ -35,13 +35,17 @@ public class StatisticService {
             eDate = LocalDateTime.parse(URLDecoder.decode(end, StandardCharsets.UTF_8), DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
         }
         for (String uri : uris) {
-            HitsRequest hits = statisticRepository.find(stDate, eDate, uri);
+            HitsRequest hits;
+            if (uniq == true) {
+                hits = statisticRepository.findDistinct(stDate, eDate, uri);
+            } else {
+                hits = statisticRepository.find(stDate, eDate, uri);
+            }
             if (hits != null) {
                 viewStatsCollection.add(ViewStats.builder().hits(hits.getHits()).app(hits.getApp()).uri(hits.getUri()).build());
             } else {
                 viewStatsCollection.add(ViewStats.builder().hits(0).uri(uri).build());
             }
-
         }
         return viewStatsCollection;
     }

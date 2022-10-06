@@ -7,19 +7,16 @@ import ru.practicum.explore.category.model.Category;
 import ru.practicum.explore.category.repository.CategoryRepository;
 import ru.practicum.explore.event.repository.EventRepository;
 import ru.practicum.explore.exception.CategoriesConflictException;
-import ru.practicum.explore.exception.CategoryNotFoundException;
+import ru.practicum.explore.exception.NotFoundException;
 
 @Service
 public class CategoryServiceImpl implements CategoryService {
     private final CategoryRepository categoryRepository;
-//    private final EventService eventService;
     private final EventRepository eventRepository;
 
     public CategoryServiceImpl(CategoryRepository categoryRepository,
-//            , EventService eventService
                                EventRepository eventRepository) {
         this.categoryRepository = categoryRepository;
-//        this.eventService = eventService;
         this.eventRepository = eventRepository;
     }
 
@@ -38,15 +35,15 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public void deleteCategory(long categoryId) {
-        if (!eventRepository.findByCategory_Id(categoryId).isEmpty()){
+        if (!eventRepository.findByCategory_Id(categoryId).isEmpty()) {
             throw new CategoriesConflictException("Невозможно удалить категорию. Есть связанные события.");
         }
-         categoryRepository.deleteById(categoryId);
+        categoryRepository.deleteById(categoryId);
     }
 
     @Override
     public Category getCategoryById(long categoryId) {
-        return categoryRepository.findById(categoryId).orElseThrow(() -> new CategoryNotFoundException("Категория не найдена."));
+        return categoryRepository.findById(categoryId).orElseThrow(() -> new NotFoundException("Категория не найдена."));
     }
 
     @Override

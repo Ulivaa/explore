@@ -10,10 +10,5 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "explore")
 public class ConfigProperties {
-
     private String statistic;
-//    private int port;
-//    private String from;
-
-    // standard getters and setters
 }

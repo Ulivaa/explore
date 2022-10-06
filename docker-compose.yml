@@ -17,7 +17,7 @@ services:
         POSTGRES_USER: kitty
         POSTGRES_PASSWORD: purrrrrr
         TZ: "Europe/Moscow"
-        STATISTIC_URL: http://statistic:9090
+        EXPLORE_STATISTIC: http://statistic:9090
 
 
   statistic:

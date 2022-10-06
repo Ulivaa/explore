@@ -15,8 +15,6 @@ public interface CompilationService {
 
     void isPinCompilation(long compId, boolean pinned);
 
-//    void pinCompilation(long compId);
-
     Collection<Compilation> getCompilations(boolean pinned, int from, int size);
 
     Compilation getCompilationById(long compId);

@@ -31,8 +31,9 @@ public class UserPrivateController {
 
     @PostMapping
     public RequestDto addUserRequest(@PathVariable long userId, @RequestParam long eventId) {
-        return RequestMapper.toRequestDto(requestService.addRequest(RequestMapper.toRequest(userId,eventId)));
+        return RequestMapper.toRequestDto(requestService.addRequest(RequestMapper.toRequest(userId, eventId)));
     }
+
     @PatchMapping("/{requestId}/cancel")
     public RequestDto cancelUserRequest(@PathVariable long userId, @PathVariable long requestId) {
         return RequestMapper.toRequestDto(requestService.cancelRequest(userId, requestId));

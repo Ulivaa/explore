@@ -23,15 +23,13 @@ public class UserAdminController {
         this.userService = userService;
     }
 
-    /*-------------------------------------- USER --------------------------------------*/
-
     @PostMapping
     public UserDto addUser(@RequestBody @Valid UserDto user) {
         return UserMapper.toUserDto(userService.addUser(UserMapper.toUser(user)));
     }
 
     @GetMapping
-    public Collection<UserDto> getAllUsers(@RequestParam(required = false)List<Long> ids,
+    public Collection<UserDto> getAllUsers(@RequestParam(required = false) List<Long> ids,
                                            @RequestParam(defaultValue = "0") int from,
                                            @RequestParam(defaultValue = "10") int size) {
         return userService.getAllUsers(ids, from, size)
@@ -44,8 +42,5 @@ public class UserAdminController {
     public void deleteUser(@PathVariable long userId) {
         userService.deleteUser(userId);
     }
-
-    /*-------------------------------------- EVENT --------------------------------------*/
-
 
 }

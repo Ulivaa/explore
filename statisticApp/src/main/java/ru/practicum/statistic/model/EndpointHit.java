@@ -22,13 +22,4 @@ public class EndpointHit {
     private String ip;
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime timestamp;
-//
-//    @Override
-//    public String toString() {
-//
-//        return "{\"app\": \""+this.app+"\",\n" +
-//                "  \"uri\": \""+this.uri+"\",\n" +
-//                "  \"ip\": \""+this.id+"\",\n" +
-//                "  \"timestamp\": \""+this.timestamp+"\"}";
-//    }
 }

@@ -25,21 +25,19 @@ public class EventInDto {
     @NotNull
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
-//    private UserShortDto initiator;
     @NotNull
-private Location location;
+    private Location location;
     private Boolean paid;
     private Long participantLimit;
     private Boolean requestModeration;
     @NotNull
     @Size(min = 3, max = 120)
     private String title;
+
     @Data
     public static class Location {
         private final double lat;
         private final double lon;
     }
-
-
 }
 

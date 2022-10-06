@@ -26,7 +26,6 @@ public class Event {
     @JoinColumn(name = "category_id")
     private Category category;
     private Long confirmedRequests;
-//    @Column(insertable = false, updatable = false)
     private LocalDateTime createdOn;
     @Column(length = 120)
     @Size(min = 20, max = 7000)
@@ -46,7 +45,5 @@ public class Event {
     @Column(length = 120)
     @Size(min = 3, max = 120)
     private String title;
-    private Long views;
-
-
+    private long views;
 }

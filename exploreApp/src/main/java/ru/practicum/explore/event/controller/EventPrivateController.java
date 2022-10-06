@@ -32,7 +32,6 @@ public class EventPrivateController {
         this.userService = userService;
         this.requestService = requestService;
     }
-// TODO посмотреть какие ограничения у эндпоинтов. кто может вызывать и при каких условиях
     /*-------------------------------------------- USER'S EVENTS --------------------------------------------*/
 
     @PostMapping

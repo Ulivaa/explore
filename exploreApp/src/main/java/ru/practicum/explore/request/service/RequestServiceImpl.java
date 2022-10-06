@@ -26,7 +26,6 @@ public class RequestServiceImpl implements RequestService {
 
     /*-------------------------------------- Для владельца события --------------------------------------*/
 
-
     @Override
     public Request rejectRequest(long userId, long eventId, long reqId) {
         if (!eventService.isUserOwnerEvent(userId, eventId)) {
@@ -58,7 +57,7 @@ public class RequestServiceImpl implements RequestService {
 
     @Override
     public Request getRequestById(long requestId) {
-        return requestRepository.findById(requestId).orElseThrow(() -> new RequestNotFoundException("Запрос не найден"));
+        return requestRepository.findById(requestId).orElseThrow(() -> new NotFoundException("Запрос не найден"));
     }
 
     @Override
@@ -104,7 +103,6 @@ public class RequestServiceImpl implements RequestService {
             }
         }
 
-//        request.setId(null);
         Event event = eventService.getEventById(request.getEventId());
 
         if (request.getRequesterId() == event.getInitiator().getId()) {

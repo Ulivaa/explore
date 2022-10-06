@@ -20,19 +20,19 @@ public interface EventService {
     Collection<Event> getFilteredEvents(String text,
                                         List<Long> categories,
                                         Boolean paid,
-                                        LocalDateTime rangeStart,
-                                        LocalDateTime rangeEnd,
+                                        String rangeStart,
+                                        String rangeEnd,
                                         Boolean onlyAvailable,
                                         Sort sort,
                                         int from,
                                         int size);
 
 
-    Collection<Event> getEventByAdmin(Integer[] users,
-                                      String[] states,
-                                      Integer[] categories,
-                                      LocalDateTime rangeStart,
-                                      LocalDateTime rangeEnd,
+    Collection<Event> getEventByAdmin(List<Long> users,
+                                      List<String> states,
+                                      List<Long> categories,
+                                      String rangeStart,
+                                      String rangeEnd,
                                       int from,
                                       int size);
 
@@ -52,9 +52,6 @@ public interface EventService {
 
     Event rejectEvent(long eventId);
 
-     Boolean isUserOwnerEvent(long userId, long eventId);
-
-    Collection<Event> getEventsByCategory(long catId);
-
+    Boolean isUserOwnerEvent(long userId, long eventId);
 
 }

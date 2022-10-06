@@ -6,8 +6,4 @@ import ru.practicum.explore.category.model.Category;
 
 @Repository
 public interface CategoryRepository extends JpaRepository<Category, Long> {
-//    Collection<Category> findAll(PageRequest pageRequest);
-//@Query("SELECT e FROM Event e " +
-//        "WHERE e.category = :category ")
-//Collection<Event> findEventsByCategory(long category);
 }
