@@ -21,6 +21,13 @@ public interface EventRepository extends JpaRepository<Event, Long> {
 
     Event findByIdAndInitiator_Id(long eventId, long initiator);
 
+    /*----------------------------------- ФИЧА -----------------------------------*/
+    Collection<Event> findAllByCategory_idInOrderByEventDate(List<Long> categories);
+
+    Collection<Event> findAllByStateOrderByEventDate(State state);
+    /*----------------------------------- ФИЧА -----------------------------------*/
+
+
     @Query(value = "SELECT * FROM events e " +
             "WHERE " +
             "(e.state = 'PUBLISHED') and " +
