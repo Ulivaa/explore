@@ -4,7 +4,6 @@ package ru.practicum.explore.event.service;
 import ru.practicum.explore.event.model.Event;
 import ru.practicum.explore.event.model.Sort;
 
-import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 
@@ -43,6 +42,8 @@ public interface EventService {
     Event getUserEvent(long eventId, long userId);
 
     Collection<Event> getUserEvents(long userId, int from, int size);
+
+    Collection<Event> getEventsFeedForUser(long userId);
 
     Event increaseEventConfirmedRequests(Event eventId);
 

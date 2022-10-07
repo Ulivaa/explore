@@ -2,12 +2,14 @@ package ru.practicum.explore.event.service;
 
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.explore.category.model.Category;
 import ru.practicum.explore.category.service.CategoryService;
 import ru.practicum.explore.event.model.Event;
 import ru.practicum.explore.event.model.Sort;
 import ru.practicum.explore.event.model.State;
 import ru.practicum.explore.event.repository.EventRepository;
 import ru.practicum.explore.exception.*;
+import ru.practicum.explore.user.model.User;
 import ru.practicum.explore.user.service.UserService;
 
 import java.net.URLDecoder;
@@ -17,6 +19,8 @@ import java.time.format.DateTimeFormatter;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -159,6 +163,22 @@ public class EventServiceImpl implements EventService {
     public Collection<Event> getUserEvents(long userId, int from, int size) {
         return eventRepository.findAllByInitiator_Id(userId, PageRequest.of(from, size));
     }
+
+
+    /*----------------------------------- ФИЧА -----------------------------------*/
+    public Collection<Event> getEventsFeedForUser(long userId) {
+        User user = userService.getUserById(userId);
+        Set<Category> categorySet = user.getCategories();
+        if (!categorySet.isEmpty()) {
+            return eventRepository.findAllByCategory_idInOrderByEventDate(categorySet.stream()
+                    .map(category -> category.getId())
+                    .collect(Collectors.toList()));
+        } else {
+            return eventRepository.findAllByStateOrderByEventDate(State.PUBLISHED);
+        }
+    }
+    /*----------------------------------- ФИЧА -----------------------------------*/
+
 
     @Override
     public Event cancelEvent(long userId, long eventId) {

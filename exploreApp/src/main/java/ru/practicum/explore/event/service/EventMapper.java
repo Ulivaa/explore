@@ -5,6 +5,8 @@ import ru.practicum.explore.event.model.*;
 import ru.practicum.explore.user.service.UserMapper;
 
 import java.time.LocalDateTime;
+import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class EventMapper {
 
@@ -57,5 +59,10 @@ public class EventMapper {
                 event.getPaid(),
                 event.getTitle(),
                 event.getViews());
+    }
+
+    public static Collection<EventShortDto> toCollectionShortDto(Collection<Event> events){
+        return events.stream().map(event -> toEventShortDto(event))
+                .collect(Collectors.toList());
     }
 }
