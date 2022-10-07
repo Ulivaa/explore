@@ -84,5 +84,6 @@ CREATE TABLE IF NOT EXISTS users_categories
     category_id       BIGINT                                  NOT NULL,
     CONSTRAINT pk_users_categories PRIMARY KEY (id),
     CONSTRAINT FK_USERS_CATEGORIES_ON_USERS FOREIGN KEY (user_id) REFERENCES users (id) ON DELETE CASCADE,
-    CONSTRAINT FK_USERS_CATEGORIES_ON_CATEGORIES FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE
+    CONSTRAINT FK_USERS_CATEGORIES_ON_CATEGORIES FOREIGN KEY (category_id) REFERENCES categories (id) ON DELETE CASCADE,
+    UNIQUE (user_id, category_id)
 );

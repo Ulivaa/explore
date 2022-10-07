@@ -170,7 +170,9 @@ public class EventServiceImpl implements EventService {
         User user = userService.getUserById(userId);
         Set<Category> categorySet = user.getCategories();
         if (!categorySet.isEmpty()) {
-            return eventRepository.findAllByCategory_idInOrderByEventDate(categorySet.stream().map(category -> category.getId()).collect(Collectors.toList()));
+            return eventRepository.findAllByCategory_idInOrderByEventDate(categorySet.stream()
+                    .map(category -> category.getId())
+                    .collect(Collectors.toList()));
         } else {
             return eventRepository.findAllByStateOrderByEventDate(State.PUBLISHED);
         }

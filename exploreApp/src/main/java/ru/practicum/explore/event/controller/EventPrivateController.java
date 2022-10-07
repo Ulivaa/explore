@@ -43,9 +43,7 @@ public class EventPrivateController {
     public Collection<EventShortDto> getUserEvents(@PathVariable long userId,
                                                    @RequestParam(defaultValue = "0") int from,
                                                    @RequestParam(defaultValue = "10") int size) {
-        return eventService.getUserEvents(userId, from, size).stream()
-                .map(event -> EventMapper.toEventShortDto(event))
-                .collect(Collectors.toList());
+        return EventMapper.toCollectionShortDto(eventService.getUserEvents(userId, from, size));
     }
 
 
@@ -53,9 +51,7 @@ public class EventPrivateController {
 
     @GetMapping("/feed")
     public Collection<EventShortDto> getEventsFeedForUser(@PathVariable long userId) {
-        return eventService.getEventsFeedForUser(userId).stream()
-                .map(event -> EventMapper.toEventShortDto(event))
-                .collect(Collectors.toList());
+        return EventMapper.toCollectionShortDto(eventService.getEventsFeedForUser(userId));
     }
     /*----------------------------------- ФИЧА -----------------------------------*/
 

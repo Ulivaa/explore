@@ -51,10 +51,8 @@ public class EventPublicController {
             @RequestParam(defaultValue = "0") int from,
             @RequestParam(defaultValue = "10") int size, HttpServletRequest request) {
         sendStatistic(request);
-        return eventService.getFilteredEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size)
-                .stream()
-                .map(event -> EventMapper.toEventShortDto(event))
-                .collect(Collectors.toList());
+        return EventMapper.toCollectionShortDto(eventService
+                .getFilteredEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable, sort, from, size));
     }
 
     @GetMapping("/{eventId}")
