@@ -1,10 +1,10 @@
-DROP TABLE users CASCADE;
-DROP TABLE categories CASCADE;
--- DROP TABLE locations CASCADE;
-DROP TABLE participation_requests CASCADE;
-DROP TABLE events CASCADE;
-DROP TABLE compilations CASCADE;
-DROP TABLE compilations_events CASCADE;
+-- необходимо для тестирования во время отладки
+-- DROP TABLE users CASCADE;
+-- DROP TABLE categories CASCADE;
+-- DROP TABLE participation_requests CASCADE;
+-- DROP TABLE events CASCADE;
+-- DROP TABLE compilations CASCADE;
+-- DROP TABLE compilations_events CASCADE;
 
 CREATE TABLE IF NOT EXISTS users
 (

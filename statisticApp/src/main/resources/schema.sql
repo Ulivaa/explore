@@ -1,4 +1,5 @@
-DROP TABLE statistics CASCADE;
+-- необходимо для тестирования во время отладки
+-- DROP TABLE statistics CASCADE;
 
 CREATE TABLE IF NOT EXISTS statistics
 (

@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.statistic.model.EndpointHit;
 import ru.practicum.statistic.model.ViewStats;
 import ru.practicum.statistic.service.StatisticService;
+import ru.practicum.statistic.service.StatisticServiceImpl;
 
 import java.util.Collection;
 import java.util.List;

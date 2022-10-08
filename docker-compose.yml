@@ -9,8 +9,6 @@ services:
       - db-explore
       - statistic
     environment:
-#      - STATISTIC_URL=http://statisticApp:9090
-       #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/explore_with_me
         DB_HOST: db-explore
         DB_PORT: 5432
         DB_NAME: explore_with_me
@@ -22,14 +20,12 @@ services:
 
   statistic:
     build: ./statisticApp
-    #    image:
     container_name: statisticApp
     ports:
       - "9090:9090"
     depends_on:
       - db-explore
     environment:
-      #      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/explore_with_me
       DB_HOST: db-explore
       DB_PORT: 5432
       DB_NAME: explore_with_me
